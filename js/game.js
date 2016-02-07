@@ -1,4 +1,4 @@
-var snake, apple, squareSize, score, cursors, scoreTextValue, textStyle_Key, textStyle_Value, timer, timerText;
+var snake, apple, squareSize, score, cursors, scoreTextValue, textStyle_Key, textStyle_Value, timer, timerTextValue, clock;
 
 var Game = {
 
@@ -19,8 +19,6 @@ var Game = {
     squareSize = 15; // The length of a side of the squares. Our image is 15x15 pixels.
     score = 0; // Game score.
     timer = 120;
-
-    game.time;
 
     // Set up a Phaser controller for keyboard input.
     cursors = game.input.keyboard.createCursorKeys();
@@ -48,7 +46,15 @@ var Game = {
 
     // Score.
     game.add.text(30, 20, "SCORE", textStyle_Key);
+    game.add.text(30, 40, "REMAINING TIME", textStyle_Key);
     scoreTextValue = game.add.text(90, 18, score.toString(), textStyle_Value);
+    timerTextValue = game.add.text(160, 38, timer.toString(), textStyle_Value);
+
+    // Set up timer
+    clock = game.time.create(false);
+    clock.loop(Phaser.Timer.SECOND, this.updateTimer, this);
+    clock.start();
+
   },
 
   update: function() {
@@ -80,7 +86,7 @@ var Game = {
 
   updateTimer: function() {
     timer -= 1;
-    timerText.text = 'Remaining Time: ' + timer;
+    timerTextValue.text = timer.toString();
     if (timer == 0) {
       end();
     }
